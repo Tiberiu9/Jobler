@@ -1,11 +1,13 @@
 # from django.shortcuts import render
-from rest_framework.decorators import api_view  # api view decorator
+from rest_framework.decorators import api_view, permission_classes  # decorators
 from rest_framework.response import Response
 from rest_framework import status  # status codes
 
 from django.contrib.auth.hashers import make_password  # hashing
 from .serializers import SignUpSerializer, UserSerializer  # serializers
 from django.contrib.auth.models import User  # inbuilt user model
+
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
 # # Create your views here.
@@ -22,7 +24,7 @@ def register(request):
             user = User.objects.create(
                 first_name=data['first_name'],
                 last_name=data['last_name'],
-                username=data['username'],
+                username=data['email'],
                 email=data['email'],
                 password=make_password(data['password'])
             )
@@ -31,3 +33,10 @@ def register(request):
             return Response({'error': 'User already exists'}, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response(user.errors)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def current_user(request):
+    serializer = UserSerializer(request.user)
+    return Response(serializer.data)
