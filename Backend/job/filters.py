@@ -2,7 +2,7 @@ from django_filters import rest_framework as filters
 from .models import Job
 
 
-class JobFilter(filters.FilterSet):
+class JobsFilter(filters.FilterSet):
 
     keyword = filters.CharFilter(field_name='title', lookup_expr='icontains')
     location = filters.CharFilter(field_name='address', lookup_expr='icontains')

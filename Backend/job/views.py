@@ -1,6 +1,6 @@
-from django.shortcuts import render
+# from django.shortcuts import render
 from django.http import HttpResponse
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -8,12 +8,14 @@ from django.db.models import Count, Avg, Max, Min
 
 from django.core.exceptions import ObjectDoesNotExist
 
-from .filters import JobFilter  # filter
+from .filters import JobsFilter  # filter
 from rest_framework.pagination import PageNumberPagination  # pagination
 
 from .models import Job
 from .serializers import JobSerializer
 from django.shortcuts import get_object_or_404
+
+from rest_framework.permissions import IsAuthenticated
 
 
 # Create your views here.
@@ -84,15 +86,14 @@ from django.shortcuts import get_object_or_404
 
 @api_view(['GET'])
 def jobs_list(request):
-
-    filterset = JobFilter(request.GET, queryset=Job.objects.all().order_by('id'))
-    count = filterset.qs.count()
+    filter_set = JobsFilter(request.GET, queryset=Job.objects.all().order_by('id'))
+    count = filter_set.qs.count()
 
     # Pagination
     resources_per_page = 3
     paginator = PageNumberPagination()
     paginator.page_size = resources_per_page
-    results = paginator.paginate_queryset(filterset.qs, request)
+    results = paginator.paginate_queryset(filter_set.qs, request)
 
     serializer = JobSerializer(results, many=True)
     return Response({
@@ -101,19 +102,29 @@ def jobs_list(request):
         'jobs': serializer.data})
 
 
+# @api_view(['POST'])
+# @permission_classes([IsAuthenticated])
+# def job_post(request):
+#     request.data['user'] = request.user
+#     data = request.data
+#     job = Job.objects.create(**data)
+#     serializer = JobSerializer(job, many=False)
+#     return Response(serializer.data, status=status.HTTP_201_CREATED)
+
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def job_post(request):
-    serializer = JobSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    request.data['user'] = request.user
+    data = request.data
+    job = Job.objects.create(**data)
+    serializer = JobSerializer(job, many=False)
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 @api_view(['GET'])
 def job_details(request, pk):
     try:
-        article = Job.objects.get(pk=pk)
+        article = Job.objects.get(id=pk)
     except ObjectDoesNotExist:
         return HttpResponse('Job with this id does not exist', status=status.HTTP_404_NOT_FOUND)
 
@@ -122,8 +133,12 @@ def job_details(request, pk):
 
 
 @api_view(['PUT'])
+@permission_classes([IsAuthenticated])
 def job_update(request, pk):
-    job = Job.objects.get(pk=pk)
+    job = Job.objects.get(id=pk)
+
+    if job.user != request.user:
+        return Response({'message': 'You can not update this job'}, status=status.HTTP_403_FORBIDDEN)
 
     serializer = JobSerializer(job, data=request.data)
     if serializer.is_valid():
@@ -133,15 +148,20 @@ def job_update(request, pk):
 
 
 @api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
 def job_delete(request, pk):
     job = get_object_or_404(Job, id=pk)
+
+    if job.user != request.user:
+        return Response({'message': 'You can not delete this job'}, status=status.HTTP_403_FORBIDDEN)
+
     job.delete()
-    return Response({'Job Deleted Successfully'}, status=status.HTTP_204_NO_CONTENT)
+
+    return Response({'message': 'Job has been Deleted.'}, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
 def get_topic_stats(request, topic):
-
     args = {'title__icontains': topic}
     jobs = Job.objects.filter(**args)
 
@@ -157,4 +177,3 @@ def get_topic_stats(request, topic):
     )
 
     return Response(stats)
-
