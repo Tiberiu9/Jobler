@@ -7,7 +7,9 @@ from django.contrib.auth.hashers import make_password  # hashing
 from .serializers import SignUpSerializer, UserSerializer  # serializers
 from django.contrib.auth.models import User  # inbuilt user model
 
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated
+
+from .validators import validate_file_extension
 
 
 # # Create your views here.
@@ -61,9 +63,29 @@ def update_user(request):
     serializer = UserSerializer(user, many=False)
     return Response(serializer.data)
 
+
 # def update_user(request):
 #     serializer = UserSerializer(instance=request.user, data=request.data, partial=True)
 #     if serializer.is_valid():
 #         serializer.save()
 #         return Response(serializer.data)
 #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def upload_resume(request):
+    user = request.user
+    resume = request.FILES.get('resume')
+
+    if not resume:
+        return Response({'error': 'Resume is required. Please upload your resume.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    if not validate_file_extension(resume.name):
+        return Response({'error': 'Invalid file format. Only PDF files are allowed.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    user.userprofile.resume = resume
+    user.userprofile.save()
+
+    serializer = UserSerializer(user, many=False)
+    return Response(serializer.data)
