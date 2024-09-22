@@ -61,4 +61,11 @@ class Job(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.title
+        return str(self.title)
+
+
+class JobApplicants(models.Model):
+    job = models.ForeignKey(Job, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    resume = models.CharField(null=True, blank=True, max_length=255)
+    applied_at = models.DateTimeField(auto_now_add=True)

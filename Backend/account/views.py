@@ -5,7 +5,7 @@ from rest_framework import status  # status codes
 
 from django.contrib.auth.hashers import make_password  # hashing
 from .serializers import SignUpSerializer, UserSerializer  # serializers
-from django.contrib.auth.models import User  # inbuilt user model
+from django.contrib.auth.models import User  # inbuilt user model for auth
 
 from rest_framework.permissions import IsAuthenticated
 
