@@ -1,4 +1,7 @@
 # from django.shortcuts import render
+from django.utils import timezone
+from datetime import datetime
+
 from django.http import HttpResponse
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -6,12 +9,13 @@ from rest_framework import status
 
 from django.db.models import Count, Avg, Max, Min
 
+
 from django.core.exceptions import ObjectDoesNotExist
 
 from .filters import JobsFilter  # filter
 from rest_framework.pagination import PageNumberPagination  # pagination
 
-from .models import Job
+from .models import Job, JobApplicants
 from .serializers import JobSerializer
 from django.shortcuts import get_object_or_404
 
@@ -177,3 +181,26 @@ def get_topic_stats(request, topic):
     )
 
     return Response(stats)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def apply_to_job(request, pk):
+
+    user = request.user
+    job = get_object_or_404(Job, id=pk)
+
+    if user.userprofile.resume is None:
+        return Response({'message': 'Please upload your resume first.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    if job.lastDate < timezone.now().date():
+        return Response({'message': 'The job has already expired'}, status=status.HTTP_400_BAD_REQUEST)
+
+    already_applied = job.jobapplicants_set.filter(user=user).exists()
+
+    if already_applied:
+        return Response({'message': 'You have already applied to this job'}, status=status.HTTP_400_BAD_REQUEST)
+
+    job_applied = JobApplicants.objects.create(user=user, job=job, resume=user.userprofile.resume)
+
+    return Response({'message': 'Job applied successfully', 'applied': True, 'job_id': job_applied.id}, status=status.HTTP_200_OK)
