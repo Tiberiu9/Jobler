@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path
 from .views import jobs_list, job_details, job_post, job_update, job_delete
 from . import views
 
@@ -11,7 +11,10 @@ urlpatterns = [
     path('jobs/<int:pk>/delete/', job_delete, name='job_delete'),
     path('stats/<str:topic>/', views.get_topic_stats, name='get_topic_stats'),
     path('jobs/<int:pk>/apply/', views.apply_to_job, name='apply_to_job'),
-
+    path('me/jobs/applied/', views.get_current_user_applied_jobs, name='get_current_user_applied_jobs'),
+    path('me/jobs/', views.get_current_user_jobs, name='get_current_user_jobs'),
+    path('jobs/<str:pk>/check/', views.is_applied, name='is_applied_to_job'),
+    path('job/<str:pk>/applicants/', views.get_job_applicants, name="get_job_applicants"),
     # path('jobs/', views.get_all_jobs, name='jobs'),
     # path('jobs/<str:pk>/', views.get_job, name='job'),
     # path('jobs/new/', views.new_job, name='new_job'),

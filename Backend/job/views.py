@@ -1,6 +1,5 @@
 # from django.shortcuts import render
 from django.utils import timezone
-from datetime import datetime
 
 from django.http import HttpResponse
 from rest_framework.decorators import api_view, permission_classes
@@ -16,7 +15,7 @@ from .filters import JobsFilter  # filter
 from rest_framework.pagination import PageNumberPagination  # pagination
 
 from .models import Job, JobApplicants
-from .serializers import JobSerializer
+from .serializers import JobSerializer, JobApplicantsSerializer
 from django.shortcuts import get_object_or_404
 
 from rest_framework.permissions import IsAuthenticated
@@ -204,3 +203,66 @@ def apply_to_job(request, pk):
     job_applied = JobApplicants.objects.create(user=user, job=job, resume=user.userprofile.resume)
 
     return Response({'message': 'Job applied successfully', 'applied': True, 'job_id': job_applied.id}, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_current_user_applied_jobs(request):
+
+    args = {'user_id': request.user.id}
+    jobs = JobApplicants.objects.filter(**args)
+    serializer = JobApplicantsSerializer(jobs, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def is_applied(request, pk):
+
+    user = request.user
+    job = get_object_or_404(Job, id=pk)
+    applied = job.jobapplicants_set.filter(user=user).exists()
+
+    return Response(applied)  # return True or False boolean value
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_current_user_jobs(request):
+
+    args = {'user_id': request.user.id}
+    jobs = Job.objects.filter(**args)
+    serializer = JobSerializer(jobs, many=True)
+    return Response(serializer.data)
+
+
+# @api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+# def get_job_applicants(request, pk):
+#
+#     user = request.user
+#     job = get_object_or_404(Job, id=pk)
+#
+#     if job.user != user:
+#         return Response({'message': 'You can not access this job applicants'}, status=status.HTTP_403_FORBIDDEN)
+#
+#     applicants = job.jobapplicants_set.all()
+#
+#     serializer = JobApplicantsSerializer(applicants, many=True)
+#     return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_job_applicants(request, pk):
+
+    user = request.user
+    job = get_object_or_404(Job, id=pk)
+
+    if job.user != user:
+        return Response({'detail': 'You can not access this job applicants'}, status=status.HTTP_403_FORBIDDEN)
+
+    applicants = job.jobapplicants_set.all()
+
+    serializer = JobApplicantsSerializer(applicants, many=True)
+    return Response(serializer.data)
