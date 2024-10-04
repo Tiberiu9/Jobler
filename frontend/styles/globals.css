@@ -26,6 +26,9 @@
 /*  }*/
 /*}*/
 
+
+
+
 @import url("https://fonts.googleapis.com/css2?family=Parisienne&display=swap");
 
 html,
@@ -81,7 +84,7 @@ body {
   cursor: pointer;
 }
 .logoImgWrapper {
-  width: 27px;
+  width: 48px;
   display: flex;
   margin-right: 10px;
 }
