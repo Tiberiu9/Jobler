@@ -127,12 +127,15 @@ def job_post(request):
 @api_view(['GET'])
 def job_details(request, pk):
     try:
-        article = Job.objects.get(id=pk)
+        job = Job.objects.get(id=pk)
     except ObjectDoesNotExist:
         return HttpResponse('Job with this id does not exist', status=status.HTTP_404_NOT_FOUND)
 
-    serializer = JobSerializer(article)
-    return Response(serializer.data)
+    applicants = job.jobapplicants_set.all().count()
+
+    serializer = JobSerializer(job, many=False)
+    # return Response({'job': serializer.data}, status=status.HTTP_200_OK)
+    return Response({'job': serializer.data, 'applicants': applicants}, status=status.HTTP_200_OK)
 
 
 @api_view(['PUT'])
