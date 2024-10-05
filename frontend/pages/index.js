@@ -18,7 +18,7 @@ const geistMono = localFont({
 });
 
 export default function Index({data}) {
-  console.log(data)
+  // console.log(data)
   return (
     <Layout>
 

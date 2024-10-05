@@ -126,10 +126,12 @@ def job_post(request):
 
 @api_view(['GET'])
 def job_details(request, pk):
-    try:
-        job = Job.objects.get(id=pk)
-    except ObjectDoesNotExist:
-        return HttpResponse('Job with this id does not exist', status=status.HTTP_404_NOT_FOUND)
+
+    job = get_object_or_404(Job, id=pk)
+    # try:
+    #     job = Job.objects.get(id=pk)
+    # except ObjectDoesNotExist:
+    #     return HttpResponse('Job with this id does not exist', status=status.HTTP_404_NOT_FOUND)
 
     applicants = job.jobapplicants_set.all().count()
 

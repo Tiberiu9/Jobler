@@ -3,11 +3,11 @@ import Head from 'next/head'
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
-const Layout = ({children, title = "Jobler - Find Jobs"}) => {
+const Layout = ({children, title = "Find Jobs"}) => {
   return (
     <div>
       <Head>
-        <title>{title}</title>
+        <title>{title} - Jobler</title>
       </Head>
 
       <Header/>

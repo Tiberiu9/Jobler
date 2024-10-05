@@ -2,13 +2,15 @@ import Layout from "@/components/layout/Layout";
 import axios from "axios";
 import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
 import JobDetails from "@/components/job/JobDetails";
+import NotFound from "@/components/layout/NotFound";
 
-export default function JobDetailsPage({ job, applicants }) {
+export default function JobDetailsPage({job, applicants, error}) {
+  if (error?.includes("No Job matches the given query.")) return <NotFound />
 
   return (
-    <Layout>
+    <Layout title={job.title}>
 
-      <JobDetails job={job} applicants={applicants} />
+      <JobDetails job={job} applicants={applicants}/>
 
     </Layout>
   );
@@ -16,9 +18,17 @@ export default function JobDetailsPage({ job, applicants }) {
 
 export async function getServerSideProps({params}) {
 
-  const res = await axios.get(`${process.env.API_URL}/api/jobs/${params.id}`)
+  try {
+    const res = await axios.get(`${process.env.API_URL}/api/jobs/${params.id}`)
+    const job = res.data.job
+    const applicants = res.data.applicants
+    return {props: {job, applicants}}
+  } catch (error) {
+    console.log(error.response.data)
+    return {props: {
+      error: error.response.data.detail
+      }}
+  }
 
-  const job = res.data.job
-  const applicants = res.data.applicants
-  return { props: { job, applicants } }
+
 }
