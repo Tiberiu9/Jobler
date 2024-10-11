@@ -7,7 +7,7 @@ const Layout = ({children, title = "Find Jobs"}) => {
   return (
     <div>
       <Head>
-        <title>{title} - Jobler</title>
+        {/*<title>{title} - Jobler</title>*/}
       </Head>
 
       <Header/>

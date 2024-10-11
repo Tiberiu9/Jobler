@@ -45,12 +45,12 @@ class Job(models.Model):
     title = models.CharField(max_length=255, null=True)
     description = models.TextField(null=True)
     email = models.EmailField(null=True)
-    address = models.CharField(max_length=200, null=True)
-    jobType = models.CharField(max_length=40, choices=JobType.choices, default=JobType.Permanent)
+    address = models.CharField(max_length=255, null=True)
+    jobType = models.CharField(max_length=255, choices=JobType.choices, default=JobType.Permanent)
 
-    education = models.CharField(max_length=40, choices=Education.choices, default=Education.Bachelors)
-    industry = models.CharField(max_length=40, choices=Industry.choices, default=Industry.Business)
-    experience = models.CharField(max_length=40, choices=Experience.choices, default=Experience.NO_EXPERIENCE)
+    education = models.CharField(max_length=255, choices=Education.choices, default=Education.Bachelors)
+    industry = models.CharField(max_length=255, choices=Industry.choices, default=Industry.Business)
+    experience = models.CharField(max_length=255, choices=Experience.choices, default=Experience.NO_EXPERIENCE)
 
     salary = models.IntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(10000000)], null=True)
     positions = models.IntegerField(default=1, null=True)
