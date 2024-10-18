@@ -152,43 +152,36 @@ def jobs_list(request):
         else:
             query_params[key] = value
 
-    # Filter
-    print('??????????? request ????????????')
-    print(request)
+    # # Filter
+    # print('??????????? request ????????????')
+    # print(request)
     queryset = Job.objects.all().order_by('id')
     filter_set = JobsFilter(query_params, queryset)
     count = filter_set.qs.count()
 
-    print('-----/////////////////------queryset--/////////////----------')
-    print(queryset)
-    print('--------------query_params---------------------------')
-    print(query_params)
-    print('----------filter_set-----------')
-    print(filter_set)
-    print('----------filter_set.qs-----------')
-    print(filter_set.qs)
-    print('-----------count------------')
-    print(count)
+    # print('-----/////////////////------queryset--/////////////----------')
+    # print(queryset)
+    # print('--------------query_params---------------------------')
+    # print(query_params)
+    # print('----------filter_set-----------')
+    # print(filter_set)
+    # print('----------filter_set.qs-----------')
+    # print(filter_set.qs)
+    # print('-----------count------------')
+    # print(count)
 
-    # Pagination
+    # # Pagination
     resources_per_page = 3
     paginator = PageNumberPagination()
     paginator.page_size = resources_per_page
     results = paginator.paginate_queryset(filter_set.qs, request)
     serializer = JobSerializer(results, many=True)
-    print('++++++++++++++++++++++++++serializer.data-++++++++++++++++++++')
-    print(serializer.data)
+    # print('++++++++++++++++++++++++++serializer.data-++++++++++++++++++++')
+    # print(serializer.data)
     return Response({
         "count": count,
         "resPerPage": resources_per_page,
         'jobs': serializer.data})
-
-
-
-
-
-
-
 
 
 # @api_view(['POST'])

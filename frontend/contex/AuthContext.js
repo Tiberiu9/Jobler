@@ -1,6 +1,7 @@
 import {useState, useEffect, createContext} from 'react';
 import {useRouter} from 'next/router';
 import axios from "axios";
+import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
 
 const AuthContext = createContext();
 
@@ -14,7 +15,7 @@ export const AuthProvider = ({children}) => {
   const router = useRouter();
 
   useEffect(() => {
-    if(!user) {
+    if (!user) {
       loadUser()
     }
   }, [user]);
@@ -46,7 +47,7 @@ export const AuthProvider = ({children}) => {
   // };
 
   // Login user
-  const login = async ({ username, password }) => {
+  const login = async ({username, password}) => {
     try {
       setLoading(true);
 
@@ -65,12 +66,12 @@ export const AuthProvider = ({children}) => {
       setLoading(false);
       setError(
         error.response &&
-          (error.response.data.detail || error.response.data.error)
+        (error.response.data.detail || error.response.data.error)
       );
     }
   };
 
- // Load user
+  // Load user
   const loadUser = async () => {
     try {
       setLoading(true);
@@ -88,7 +89,7 @@ export const AuthProvider = ({children}) => {
       setUser(null);
       setError(
         error.response &&
-          (error.response.data.detail || error.response.data.error)
+        (error.response.data.detail || error.response.data.error)
       );
     }
   };
@@ -109,13 +110,44 @@ export const AuthProvider = ({children}) => {
       setUser(null);
       setError(
         error.response &&
-          (error.response.data.detail || error.response.data.error)
+        (error.response.data.detail || error.response.data.error)
       );
     }
   };
 
+
+  // Register user
+  const register = async ({firstName, lastName, email, password}) => {
+    try {
+      setLoading(true);
+
+      const res = await axios.post(`${process.env.API_URL}/api/register/`, {
+        first_name: firstName,
+        last_name: lastName,
+        email,
+        password,
+      });
+
+      if (res.data.message) {
+        setLoading(false);
+        await router.push("/login");
+      }
+    } catch (error) {
+      setLoading(false);
+      setError(
+        error.response &&
+        (error.response.data.detail || error.response.data.error)
+      );
+    }
+  };
+
+  //Clear errors
+  const clearErrors = () => {
+    setError(null);
+  };
+
   return (
-    <AuthContext.Provider value={{loading, user, error, isAuthenticated, login, logout}}>
+    <AuthContext.Provider value={{loading, user, error, isAuthenticated, login, logout, register, clearErrors}}>
       {children}
     </AuthContext.Provider>
   )
