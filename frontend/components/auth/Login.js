@@ -30,7 +30,7 @@ const Login = () => {
     e.preventDefault();
     login({ username: email, password });
     console.log(email, password)
-    // router.push("/jobs");
+    router.push("/jobs");
   };
 
 

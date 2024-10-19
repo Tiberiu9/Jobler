@@ -52,7 +52,9 @@ const Home = ({data}) => {
               <a href="/search">Go to Search</a>
             </div>
           </div>
-          {jobs && jobs.map((job) => <JobItem key={job.id} job={job}/>)}
+          <div>
+            {jobs && jobs.map((job) => <JobItem key={job.id} job={job}/>)}
+          </div>
 
           {resPerPage < count && (
             <div className="d-flex justify-content-center mt-5">

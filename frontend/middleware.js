@@ -8,6 +8,7 @@
 //   "experience",
 //   "salary",
 //   "jobType",
+//   "id"
 // ];
 //
 // export async function middleware(request) {
@@ -29,7 +30,6 @@
 // }
 
 
-
 import { NextResponse } from "next/server";
 
 const allowedParams = [
@@ -40,12 +40,13 @@ const allowedParams = [
   "experience",
   "salary",
   "jobType",
+  "id"
 ];
 
 const allowedValues = {
   jobType: ["Permanent", "Temporary", "Internship"],
   education: ["Bachelors", "Masters", "Phd"],
-  experience: ["No+Experience", "1+Year", "2+Years", "3+Years+or+above"],
+  experience: ["No Experience", "1 Year", "2 Years", "3 Years or above"],
   salary: ["1-50000", "50000-100000", "100000-200000", "200000-300000", "300000-400000", "400000-1000000"],
 };
 
@@ -67,3 +68,25 @@ export async function middleware(request) {
     return NextResponse.redirect(url);
   }
 }
+
+
+// export async function middleware(request) {
+//   console.log('Request:', request);
+//   const url = request.nextUrl;
+//   const queryParams = url.searchParams;
+//   let changed = false;
+//
+//   queryParams.forEach((param, key) => {
+//     if (!allowedParams.includes(key)) {
+//       queryParams.delete(key);
+//       changed = true;
+//     } else if (allowedValues[key] && !allowedValues[key].includes(param)) {
+//       queryParams.delete(key);
+//       changed = true;
+//     }
+//   });
+//
+//   if (changed) {
+//     return NextResponse.redirect(url);
+//   }
+// }

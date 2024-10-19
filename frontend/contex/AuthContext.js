@@ -20,32 +20,6 @@ export const AuthProvider = ({children}) => {
     }
   }, [user]);
 
-
-  // // Login user
-  // const login = async ({ username, password }) => {
-  //   try {
-  //     setLoading(true);
-  //
-  //     const res = await axios.post("/api/auth/login", {
-  //       username,
-  //       password,
-  //     });
-  //
-  //     if (res.data.success) {
-  //       await loadUser();
-  //       setIsAuthenticated(true);
-  //       setLoading(false);
-  //       await router.push("/");
-  //     }
-  //   } catch (error) {
-  //     setLoading(false);
-  //     setError(
-  //       error.response &&
-  //         (error.response.data.detail || error.response.data.error)
-  //     );
-  //   }
-  // };
-
   // Login user
   const login = async ({username, password}) => {
     try {
@@ -60,7 +34,7 @@ export const AuthProvider = ({children}) => {
         loadUser();
         setIsAuthenticated(true);
         setLoading(false);
-        router.push("/");
+        await router.push("/");
       }
     } catch (error) {
       setLoading(false);
