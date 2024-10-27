@@ -29,8 +29,7 @@ const Login = () => {
   const submitHandler = (e) => {
     e.preventDefault();
     login({ username: email, password });
-    console.log(email, password)
-    router.push("/jobs");
+    // router.push("/");
   };
 
 
