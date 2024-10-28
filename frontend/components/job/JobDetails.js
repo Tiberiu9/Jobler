@@ -1,7 +1,25 @@
-import React from "react";
+import React, {useContext, useEffect} from "react";
 import moment from "moment/moment";
 
-const JobDetails = ({ job, applicants }) => {
+import JobContext from "@/contex/JobContext";
+import {toast} from "react-toastify";
+
+const JobDetails = ({job, applicants, access_token}) => {
+
+  const {applyToJob, checkJobApplied, applied, loading, error, clearErrors} = useContext(JobContext);
+
+  if (error) {
+    toast.error(error);
+    clearErrors();
+  }
+
+  checkJobApplied(job.id, access_token);
+  const applyToJobHandler = () => {
+    applyToJob(job.id, access_token);
+  }
+
+  const isLastDatePassed = new Date(job.lastDate) < new Date();
+
   return (
     <div className="job-details-wrapper">
       <div className="container container-fluid">
@@ -21,9 +39,25 @@ const JobDetails = ({ job, applicants }) => {
 
                 <div className="mt-3">
                   <span>
-                    <button className="btn btn-primary px-4 py-2 apply-btn">
-                      Apply Now
-                    </button>
+                    {loading ? (
+                      "Loading..."
+                    ) : applied ? (
+                      <button
+                        disabled
+                        className="btn btn-success px-4 py-2 apply-btn"
+                      >
+                        {/*<i className="fas fa-check" aria-hidden="true"></i>*/}
+                        {loading ? "Loading" : "Applied"}
+                      </button>
+                    ) : (
+                      <button
+                        className="btn btn-primary px-4 py-2 apply-btn"
+                        onClick={applyToJobHandler}
+                        disabled={isLastDatePassed}
+                      >
+                        {loading ? "Loading..." : "Apply Now"}
+                      </button>
+                    )}
                     <span className="ml-4 text-success">
                       <b>{applicants}</b> candidates has applied to this job.
                     </span>
@@ -88,7 +122,7 @@ const JobDetails = ({ job, applicants }) => {
           <div className="col-xl-3 col-lg-4">
             <div className="job-contact-details p-3">
               <h4 className="my-4">More Details</h4>
-              <hr />
+              <hr/>
               <h5>Email Address:</h5>
               <p>{job.email}</p>
 
@@ -99,14 +133,27 @@ const JobDetails = ({ job, applicants }) => {
               <p>{job.lastDate}</p>
             </div>
 
-            <div className="mt-5 p-0">
-              <div className="alert alert-danger">
-                <h5>Note:</h5>
-                You can no longer apply to this job. This job is expired. Last
-                date to apply for this job was: <b>15-2-2022</b>
-                <br /> Checkout others job on Jobbee.
-              </div>
-            </div>
+
+            {/*<div className="mt-5 p-0">*/}
+            {/*  <div className="alert alert-danger">*/}
+            {/*    <h5>Note:</h5>*/}
+            {/*    You can no longer apply to this job. This job is expired. Last*/}
+            {/*    date to apply for this job was: <b>{job.lastDate}</b>*/}
+            {/*    <br/> Checkout others job on Jobbee.*/}
+            {/*  </div>*/}
+            {/*</div>*/}
+            {
+              {isLastDatePassed} && (
+                <div className="mt-5 p-0">
+                  <div className="alert alert-danger">
+                    <h5>Note:</h5>
+                    You can no longer apply to this job. This job is expired. Last
+                    date to apply for this job was: <b>{job.lastDate}</b>
+                    <br/> Checkout others job on Jobbee.
+                  </div>
+                </div>
+              )
+            }
           </div>
         </div>
       </div>

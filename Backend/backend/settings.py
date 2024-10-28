@@ -68,16 +68,16 @@ INSTALLED_APPS = [
 
 # CSRF_TRUSTED_ORIGINS = ['https://jobler-django.fly.dev']
 
-# CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = True
 
-CORS_ALLOWED_ORIGINS = [
-    'https://jobler.fly.dev',
-    # # ================ UNCOMMENT FOR DEVELOPMENT ====================
-    # # ===============================================================
-    'http://localhost:3000',
-    'http://127.0.0.1:8000',
-    'http://localhost:5173'
-]
+# CORS_ALLOWED_ORIGINS = [
+#     'https://jobler.fly.dev',
+#     # # ================ UNCOMMENT FOR DEVELOPMENT ====================
+#     # # ===============================================================
+#     'http://localhost:3000',
+#     'http://127.0.0.1:8000',
+#     'http://localhost:5173'
+# ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

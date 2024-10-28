@@ -4,31 +4,29 @@ import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/post
 import JobDetails from "@/components/job/JobDetails";
 import NotFound from "@/components/layout/NotFound";
 
-export default function JobDetailsPage({job, applicants, error}) {
+export default function JobDetailsPage({job, applicants, access_token, error}) {
   if (error?.includes("No Job matches the given query.")) return <NotFound />
 
   return (
     <Layout title={job.title}>
 
-      <JobDetails job={job} applicants={applicants}/>
+      <JobDetails job={job} applicants={applicants} access_token={access_token}/>
 
     </Layout>
   );
 }
 
-export async function getServerSideProps({params}) {
+export async function getServerSideProps({req, params}) {
 
   try {
     const res = await axios.get(`${process.env.API_URL}/api/jobs/${params.id}`)
     const job = res.data.job
     const applicants = res.data.applicants
-    return {props: {job, applicants}}
+    const access_token = req.cookies.access  || ''
+    return {props: {job, applicants, access_token}}
   } catch (error) {
-    console.log(error.response.data)
     return {props: {
       error: error.response.data.detail
       }}
   }
-
-
 }
