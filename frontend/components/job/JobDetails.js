@@ -133,27 +133,17 @@ const JobDetails = ({job, applicants, access_token}) => {
               <p>{job.lastDate}</p>
             </div>
 
-
-            {/*<div className="mt-5 p-0">*/}
-            {/*  <div className="alert alert-danger">*/}
-            {/*    <h5>Note:</h5>*/}
-            {/*    You can no longer apply to this job. This job is expired. Last*/}
-            {/*    date to apply for this job was: <b>{job.lastDate}</b>*/}
-            {/*    <br/> Checkout others job on Jobbee.*/}
-            {/*  </div>*/}
-            {/*</div>*/}
-            {
-              {isLastDatePassed} && (
-                <div className="mt-5 p-0">
-                  <div className="alert alert-danger">
-                    <h5>Note:</h5>
-                    You can no longer apply to this job. This job is expired. Last
-                    date to apply for this job was: <b>{job.lastDate}</b>
-                    <br/> Checkout others job on Jobbee.
-                  </div>
+            {isLastDatePassed && (
+              <div className="mt-5 p-0">
+                <div className="alert alert-danger">
+                  <h5>Note:</h5>
+                  You can no longer apply to this job. This job is expired. Last
+                  date to apply for this job was: <b>{job.lastDate}</b>
+                  <br/> Checkout others job on Jobbee.
                 </div>
-              )
-            }
+              </div>
+            )}
+
           </div>
         </div>
       </div>
