@@ -139,7 +139,7 @@ const JobDetails = ({job, applicants, access_token}) => {
                   <h5>Note:</h5>
                   You can no longer apply to this job. This job is expired. Last
                   date to apply for this job was: <b>{job.lastDate}</b>
-                  <br/> Checkout others job on Jobbee.
+                  <br/> Checkout others job on Jobler.
                 </div>
               </div>
             )}
