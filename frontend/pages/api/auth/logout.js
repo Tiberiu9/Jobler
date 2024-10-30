@@ -1,5 +1,4 @@
 import cookie from "cookie";
-import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
 
 export default async (req, res) => {
   if (req.method === "POST") {

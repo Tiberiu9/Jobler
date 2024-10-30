@@ -1,4 +1,3 @@
-import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
 import axios from "axios";
 import cookie from "cookie";
 

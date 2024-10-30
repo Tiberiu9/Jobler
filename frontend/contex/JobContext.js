@@ -1,7 +1,6 @@
 import {useState, useEffect, createContext} from 'react';
-import {useRouter} from 'next/router';
+// import {useRouter} from 'next/router';
 import axios from "axios";
-import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
 
 const JobContext = createContext();
 
@@ -12,7 +11,8 @@ export const JobProvider = ({children}) => {
   const [updated, setUpdated] = useState(null);
   const [applied, setApplied] = useState(false);
   const [stats, setStats] = useState(false);
-  const [created, setCreated] = useState(false);
+  const [created, setCreated] = useState(null);
+  const [deleted, setDeleted] = useState(null);
 
 
    // Create a new job
@@ -42,6 +42,35 @@ export const JobProvider = ({children}) => {
       );
     }
   };
+
+    // Update job
+  const updateJob = async (id, data, access_token) => {
+    try {
+      setLoading(true);
+
+      const res = await axios.put(
+        `${process.env.API_URL}/api/jobs/${id}/update/`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        }
+      );
+
+      if (res.data) {
+        setLoading(false);
+        setUpdated(true);
+      }
+    } catch (error) {
+      setLoading(false);
+      setError(
+        error.response &&
+          (error.response.data.detail || error.response.data.error)
+      );
+    }
+  };
+
 
   // Apply to job
   const applyToJob = async (id, access_token) => {
@@ -118,6 +147,32 @@ export const JobProvider = ({children}) => {
     }
   };
 
+
+  // Delete job
+  const deleteJob = async (id, access_token) => {
+    try {
+      setLoading(true);
+
+      const res = await axios.delete(
+        `${process.env.API_URL}/api/jobs/${id}/delete/`,
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        }
+      );
+
+      setLoading(false);
+      setDeleted(true);
+    } catch (error) {
+      setLoading(false);
+      setError(
+        error.response &&
+          (error.response.data.detail || error.response.data.error)
+      );
+    }
+  };
+
   //Clear errors
   const clearErrors = () => {
     setError(null);
@@ -130,14 +185,18 @@ export const JobProvider = ({children}) => {
         error,
         created,
         updated,
+        deleted,
         applied,
         stats,
         newJob,
+        updateJob,
+        deleteJob,
         getTopicStats,
         applyToJob,
         setUpdated,
         setCreated,
         checkJobApplied,
+        setDeleted,
         clearErrors
       }}>
       {children}

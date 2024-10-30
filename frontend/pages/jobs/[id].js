@@ -1,6 +1,5 @@
 import Layout from "@/components/layout/Layout";
 import axios from "axios";
-import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
 import JobDetails from "@/components/job/JobDetails";
 import NotFound from "@/components/layout/NotFound";
 

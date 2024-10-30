@@ -1,9 +1,8 @@
 import Layout from "@/components/layout/Layout";
 import UpdateProfile from "@/components/user/UpdateProfile";
 import axios from "axios";
-import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
 
-import {isAuthenticated, isAuthenticatedUser} from "@/utils/isAuthenticated";
+import { isAuthenticatedUser} from "@/utils/isAuthenticated";
 
 export default function UpdateProfilePage( {access_token} ) {
 

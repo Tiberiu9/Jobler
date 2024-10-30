@@ -20,6 +20,9 @@ const JobDetails = ({job, applicants, access_token}) => {
 
   const isLastDatePassed = new Date(job.lastDate) < new Date();
 
+  const verb = applicants === 1 ? 'has' : 'have';
+  const candidateText = `${applicants} candidate${applicants !== 1 ? 's' : ''} ${verb} applied to this job.`;
+
   return (
     <div className="job-details-wrapper">
       <div className="container container-fluid">
@@ -59,7 +62,8 @@ const JobDetails = ({job, applicants, access_token}) => {
                       </button>
                     )}
                     <span className="ml-4 text-success">
-                      <b>{applicants}</b> candidates has applied to this job.
+                      {/*<b>{applicants}</b> candidates has applied to this job.*/}
+                      <b>{candidateText}</b>
                     </span>
                   </span>
                 </div>

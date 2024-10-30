@@ -25,7 +25,7 @@ const Header = () => {
           </div>
         </Link>
         <div className="btnsWrapper">
-          <Link href="/employeer/jobs/new">
+          <Link href="/employer/jobs/new">
             <button className="postAJobButton">
               <span>Post A Job</span>
             </button>
@@ -45,7 +45,7 @@ const Header = () => {
                 className="dropdown-menu"
                 aria-labelledby="dropDownMenuButton"
               >
-                <Link href="/employeer/jobs" className="dropdown-item">My Jobs</Link>
+                <Link href="/employer/jobs" className="dropdown-item">My Jobs</Link>
                 <Link href="/me/applied" className="dropdown-item">Jobs Applied</Link>
                 <Link href="/me" className="dropdown-item">Profile</Link>
                 <Link href="/upload/resume" className="dropdown-item">Upload Resume</Link>

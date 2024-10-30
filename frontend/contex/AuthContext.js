@@ -1,7 +1,6 @@
 import {useState, useEffect, createContext} from 'react';
 import {useRouter} from 'next/router';
 import axios from "axios";
-import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
 
 const AuthContext = createContext();
 
