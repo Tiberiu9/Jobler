@@ -38,7 +38,7 @@ const Login = () => {
       <div className="modalWrapper">
         <div className="left">
           <div style={{ width: "100%", height: "100%", position: "relative" }}>
-            <Image src="/images/login.svg" alt="login" layout="fill"/>
+            <Image src="/images/login.svg" alt="login" fill style={{ width: '100%' }}/>
           </div>
         </div>
         <div className="right">

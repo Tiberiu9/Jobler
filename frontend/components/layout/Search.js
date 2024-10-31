@@ -26,7 +26,7 @@ const Search = () => {
       <div className="modalWrapper">
         <div className="left">
           <div style={{ width: "100%", height: "100%", position: "relative" }}>
-            <Image src="/images/job-search.svg" alt="search" layout="fill" />
+            <Image src="/images/job-search.svg" alt="search" fill style={{ width: '100%' }} />
           </div>
         </div>
         <div className="right">

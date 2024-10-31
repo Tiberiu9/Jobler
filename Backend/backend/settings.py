@@ -9,20 +9,25 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
+import os
 from datetime import timedelta
 from pathlib import Path
-import os
+
 import dotenv
-from dotenv import load_dotenv
 import dj_database_url
 
+# from dotenv import load_dotenv
 
-load_dotenv()   # loads .env file
+
+dotenv.load_dotenv()   # loads .env file
+
+# dotenv.read_dotenv()
+# dotenv.read_dotenv()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# dotenv.read_dotenv()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/

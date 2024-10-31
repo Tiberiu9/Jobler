@@ -51,7 +51,7 @@ const UploadResume = ({access_token}) => {
       <div className="modalWrapper">
         <div className="left">
           <div style={{width: "100%", height: "100%", position: "relative"}}>
-            <Image src="/images/resume-upload.svg" alt="resume" layout="fill"/>
+            <Image src="/images/resume-upload.svg" alt="resume" fill style={{ width: '100%' }}/>
           </div>
         </div>
         <div className="right">

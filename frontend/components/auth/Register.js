@@ -37,7 +37,7 @@ const Register = () => {
       <div className="modalWrapper">
         <div className="left">
           <div style={{ width: "100%", height: "100%", position: "relative" }}>
-            <Image src="/images/signup.svg" alt="register" layout="fill" />
+            <Image src="/images/signup.svg" alt="register" fill style={{ width: '100%' }}/>
           </div>
         </div>
         <div className="right">

@@ -7,7 +7,7 @@ from rest_framework import status
 def custom_exception_response(exc, context):
     response = exception_handler(exc, context)
     exception_class = exc.__class__.__name__
-    print(exception_class)
+    # print(exception_class)
     if exception_class == 'AuthenticationFailed':
         response = Response({'error': 'Invalid username or password. Try again'}, status=status.HTTP_401_UNAUTHORIZED)
 
